@@ -4,32 +4,46 @@ import { useAuth } from '../context/AuthContext';
 
 const UserDashboard = () => {
   const [events, setEvents] = useState([]);
+  const [myParticipations, setMyParticipations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
 
-  // Fetch events from server
+  // ✅ Fetch all events
   const fetchEvents = async () => {
     try {
       const response = await axios.get('/events');
-      setEvents(response.data); // now includes participants with status
+      setEvents(response.data);
     } catch (err) {
       setError(err);
-    } finally {
-      setLoading(false);
+    }
+  };
+
+  // ✅ Fetch events the user has participated in
+  const fetchMyParticipations = async () => {
+    try {
+      const response = await axios.get(`/users/${user._id}/participations`);
+      setMyParticipations(response.data);
+    } catch (err) {
+      console.error("Error fetching my participations", err);
     }
   };
 
   useEffect(() => {
-    fetchEvents();
+    const fetchAll = async () => {
+      await Promise.all([fetchEvents(), fetchMyParticipations()]);
+      setLoading(false);
+    };
+    fetchAll();
   }, []);
 
-  // Participate in event
+  // ✅ Handle participate button
   const handleParticipate = async (eventId) => {
     try {
       await axios.post(`/events/${eventId}/register`);
       alert('Participation request sent!');
-      fetchEvents(); // Refresh events to show status
+      fetchEvents();
+      fetchMyParticipations();
     } catch (err) {
       alert('Failed to participate: ' + (err.response?.data?.message || err.message));
     }
@@ -42,6 +56,44 @@ const UserDashboard = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">User Dashboard</h1>
 
+      {/* ✅ My Participations */}
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold mb-4">My Participations</h2>
+        {myParticipations.length === 0 ? (
+          <p className="text-gray-500">You haven’t participated in any events yet.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {myParticipations.map((event) => (
+              <div key={event._id} className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                <p className="text-gray-700 mb-1">{event.description}</p>
+                <p className="text-gray-600 text-sm">
+                  Date: {new Date(event.date).toLocaleDateString()}
+                </p>
+                <p className="text-gray-600 text-sm">
+                  Location: {event.location}
+                </p>
+                <p className="mt-2 text-sm">
+                  Status:{' '}
+                  <span
+                    className={`${
+                      event.participantStatus === 'Approved'
+                        ? 'text-green-600'
+                        : event.participantStatus === 'Rejected'
+                        ? 'text-red-600'
+                        : 'text-yellow-600'
+                    } font-semibold`}
+                  >
+                    {event.participantStatus}
+                  </span>
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* ✅ Available Events */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Available Events</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -53,7 +105,7 @@ const UserDashboard = () => {
               const userParticipation = participants.find(
                 (p) => p.user._id === user._id
               );
-              const alreadyParticipating = userParticipation !== undefined;
+              const alreadyParticipating = !!userParticipation;
 
               return (
                 <div key={event._id} className="bg-white shadow-md rounded-lg p-4">
