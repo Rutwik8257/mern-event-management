@@ -13,16 +13,29 @@ connectDB();
 
 const app = express();
 
-// ✅ CORS configuration
-app.use(cors({
- origin: [
-  'https://mern-event-management-ss19.vercel.app',
-  'https://mern-event-management-ndmr.vercel.app',  // if you have multiple frontends
-  'http://localhost:5173'
-],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true,
-}));
+// ✅ CORS configuration — allow preflight and correct origins
+const allowedOrigins = [
+  'https://mern-event-management-ss19.vercel.app', // your Vercel frontend
+  'https://mern-event-management-ndmr.vercel.app', // alternate frontend (if any)
+  'http://localhost:5173',                         // local dev
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS blocked for origin: ${origin}`));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    credentials: true,
+  })
+);
+
+// ✅ Handle preflight requests explicitly
+app.options('*', cors());
 
 // Middleware to parse JSON
 app.use(express.json());
