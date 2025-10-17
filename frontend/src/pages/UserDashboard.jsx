@@ -16,14 +16,14 @@ const UserDashboard = () => {
       setEvents(response.data);
     } catch (err) {
       setError(err);
+      console.error('Error fetching all events', err);
     }
   };
 
-  // Fetch events the user has participated in
   const fetchParticipations = async () => {
     try {
-      const response = await axios.get('/users/dashboard');
-      setParticipatingEvents(response.data.participatingEvents);
+      const response = await axios.get('/users/dashboard'); // ✅ Correct route
+      setParticipatingEvents(response.data.participatingEvents); // Use the array
     } catch (err) {
       console.error('Error fetching my participations', err);
     }
@@ -56,7 +56,6 @@ const UserDashboard = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">User Dashboard</h1>
 
-      {/* My Participations */}
       <section className="mb-10">
         <h2 className="text-2xl font-semibold mb-4">My Participations</h2>
         {participatingEvents.length === 0 ? (
@@ -84,7 +83,7 @@ const UserDashboard = () => {
                         : 'text-yellow-600'
                     } font-semibold`}
                   >
-                    {event.participantStatus}
+                    {event.participantStatus || 'Pending'}
                   </span>
                 </p>
               </div>
@@ -93,7 +92,6 @@ const UserDashboard = () => {
         )}
       </section>
 
-      {/* Available Events */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Available Events</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -138,7 +136,7 @@ const UserDashboard = () => {
                             : 'text-yellow-600'
                         } font-semibold`}
                       >
-                        {userParticipation.status}
+                        {userParticipation.status || 'Pending'}
                       </span>
                     </p>
                   )}
