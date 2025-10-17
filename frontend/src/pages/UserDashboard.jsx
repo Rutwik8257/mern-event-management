@@ -4,12 +4,12 @@ import { useAuth } from '../context/AuthContext';
 
 const UserDashboard = () => {
   const [events, setEvents] = useState([]);
-  const [myParticipations, setMyParticipations] = useState([]);
+  const [participatingEvents, setParticipatingEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
 
-  // ✅ Fetch all events
+  // Fetch all events
   const fetchEvents = async () => {
     try {
       const response = await axios.get('/events');
@@ -19,31 +19,31 @@ const UserDashboard = () => {
     }
   };
 
-  // ✅ Fetch events the user has participated in
-  const fetchMyParticipations = async () => {
+  // Fetch events the user has participated in
+  const fetchParticipations = async () => {
     try {
-      const response = await axios.get(`/users/${user._id}/participations`);
-      setMyParticipations(response.data);
+      const response = await axios.get('/users/dashboard');
+      setParticipatingEvents(response.data.participatingEvents);
     } catch (err) {
-      console.error("Error fetching my participations", err);
+      console.error('Error fetching my participations', err);
     }
   };
 
   useEffect(() => {
     const fetchAll = async () => {
-      await Promise.all([fetchEvents(), fetchMyParticipations()]);
+      await Promise.all([fetchEvents(), fetchParticipations()]);
       setLoading(false);
     };
     fetchAll();
   }, []);
 
-  // ✅ Handle participate button
+  // Handle participate button
   const handleParticipate = async (eventId) => {
     try {
       await axios.post(`/events/${eventId}/register`);
       alert('Participation request sent!');
       fetchEvents();
-      fetchMyParticipations();
+      fetchParticipations();
     } catch (err) {
       alert('Failed to participate: ' + (err.response?.data?.message || err.message));
     }
@@ -56,14 +56,14 @@ const UserDashboard = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">User Dashboard</h1>
 
-      {/* ✅ My Participations */}
+      {/* My Participations */}
       <section className="mb-10">
         <h2 className="text-2xl font-semibold mb-4">My Participations</h2>
-        {myParticipations.length === 0 ? (
+        {participatingEvents.length === 0 ? (
           <p className="text-gray-500">You haven’t participated in any events yet.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {myParticipations.map((event) => (
+            {participatingEvents.map((event) => (
               <div key={event._id} className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <h3 className="text-xl font-bold mb-2">{event.title}</h3>
                 <p className="text-gray-700 mb-1">{event.description}</p>
@@ -93,7 +93,7 @@ const UserDashboard = () => {
         )}
       </section>
 
-      {/* ✅ Available Events */}
+      {/* Available Events */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Available Events</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
