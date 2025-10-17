@@ -13,12 +13,14 @@ connectDB();
 
 const app = express();
 
-// ✅ CORS configuration — allow preflight and correct origins
 const allowedOrigins = [
-  'https://mern-event-management-ss19.vercel.app', // your Vercel frontend
-  'https://mern-event-management-ndmr.vercel.app', // alternate frontend (if any)
-  'http://localhost:5173',                         // local dev
+  'https://mern-event-management-ss19.vercel.app',
+  'https://mern-event-management-ndmr.vercel.app',
+  'http://localhost:5173',
+  'https://mern-event-management-ss19-git-main-rutwiks-projects-3e32d3b9.vercel.app',
+  'https://mern-event-management-ss19-2cqosvp8j-rutwiks-projects-3e32d3b9.vercel.app',
 ];
+
 
 app.use(
   cors({
