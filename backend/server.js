@@ -13,19 +13,17 @@ connectDB();
 
 const app = express();
 
-const allowedOrigins = [
-  'https://mern-event-management-ss19.vercel.app',
-  'https://mern-event-management-ndmr.vercel.app',
-  'http://localhost:5173',
-  'https://mern-event-management-ss19-git-main-rutwiks-projects-3e32d3b9.vercel.app',
-  'https://mern-event-management-ss19-2cqosvp8j-rutwiks-projects-3e32d3b9.vercel.app',
-];
-
+/**
+ * ✅ FIXED CORS
+ * Allows all Vercel deployments + localhost
+ * Prevents ERR_NETWORK on every new Vercel build
+ */
+const allowedDomains = ['vercel.app', 'localhost'];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedDomains.some(domain => origin.includes(domain))) {
         callback(null, true);
       } else {
         callback(new Error(`CORS blocked for origin: ${origin}`));
@@ -35,10 +33,6 @@ app.use(
     credentials: true,
   })
 );
-
-// ✅ Handle preflight requests explicitly
-app.options(/.*/, cors());
-
 
 // Middleware to parse JSON
 app.use(express.json());
