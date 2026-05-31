@@ -79,7 +79,7 @@ const deleteEvent = asyncHandler(async (req, res) => {
 // @route   POST /api/events/:id/participate
 // @access  Private/User
 const participateInEvent = asyncHandler(async (req, res) => {
-  const event = await Event.findById(req.params.eventId); // use eventId here
+  const event = await Event.findById(req.params.eventId);
   if (!event) {
     res.status(404);
     throw new Error('Event not found');
@@ -92,6 +92,15 @@ const participateInEvent = asyncHandler(async (req, res) => {
   if (alreadyParticipating) {
     res.status(400);
     throw new Error('Already participating in this event');
+  }
+
+  // Enforce capacity limit
+  if (event.maxParticipants !== null && event.maxParticipants !== undefined) {
+    const approvedCount = event.participants.filter(p => p.status === 'Approved').length;
+    if (approvedCount >= event.maxParticipants) {
+      res.status(400);
+      throw new Error('Event is full');
+    }
   }
 
   event.participants.push({ user: req.user._id });
@@ -232,7 +241,7 @@ const rejectParticipant = asyncHandler(async (req, res) => {
     throw new Error("Participant not found");
   }
 
-  participant.remove(); // delete subdocument
+  event.participants.pull(participantId);
   await event.save();
 
   res.json({ message: "Participant rejected" });

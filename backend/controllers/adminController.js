@@ -98,6 +98,8 @@ const updateEvent = asyncHandler(async (req, res) => {
     event.description = req.body.description || event.description;
     event.date = req.body.date || event.date;
     event.location = req.body.location || event.location;
+    event.maxParticipants = req.body.maxParticipants !== undefined ? (req.body.maxParticipants || null) : event.maxParticipants;
+    event.status = req.body.status || event.status;
 
     const updatedEvent = await event.save();
     res.json(updatedEvent);

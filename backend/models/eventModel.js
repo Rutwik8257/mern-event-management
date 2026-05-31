@@ -19,12 +19,14 @@ const eventSchema = new mongoose.Schema(
     description: { type: String },
     date: { type: Date, required: true },
     location: { type: String, required: true },
+    maxParticipants: { type: Number, default: null }, // null = unlimited
+    status: { type: String, enum: ['Upcoming', 'Ongoing', 'Completed'], default: 'Upcoming' },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    participants: [participantSchema],   // 👈 add this
+    participants: [participantSchema],
   },
   { timestamps: true }
 );

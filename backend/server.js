@@ -1,6 +1,7 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import helmet from 'helmet';
 import connectDB from './config/db.js';
 import adminRoutes from './routes/adminRoutes.js';
 import analyticsRoutes from "./routes/analytics.js";
@@ -13,11 +14,8 @@ connectDB();
 
 const app = express();
 
-/**
- * ✅ FIXED CORS
- * Allows all Vercel deployments + localhost
- * Prevents ERR_NETWORK on every new Vercel build
- */
+app.use(helmet());
+
 const allowedDomains = ['vercel.app', 'localhost'];
 
 app.use(
@@ -34,17 +32,14 @@ app.use(
   })
 );
 
-// Middleware to parse JSON
 app.use(express.json());
 
-// ✅ API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/analytics', analyticsRoutes);
 
-// ✅ Default route for testing
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
