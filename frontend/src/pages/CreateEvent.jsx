@@ -1,3 +1,5 @@
+import { Button } from "../components/Button";
+import "../styles/enterprise.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
@@ -30,12 +32,12 @@ const CreateEvent = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="eh-screen eh-workspace container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">Create Event</h1>
 
-      {error && <p className="text-red-500 mb-4">{error.message}</p>}
+      {error && <p className="eh-text-red-500 mb-4">{error.message}</p>}
 
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 max-w-md">
+      <form onSubmit={handleSubmit} className="eh-bg-white eh-shadow-md rounded-lg p-6 max-w-md">
         <div className="mb-4">
           <label className="block mb-1 font-semibold">Title:</label>
           <input
@@ -71,7 +73,7 @@ const CreateEvent = () => {
             className="w-full border px-3 py-2 rounded"
             required
           />
-          <small className="text-gray-500">dd-mm-yyyy</small>
+          <small className="eh-text-gray-500">dd-mm-yyyy</small>
         </div>
 
         <div className="mb-4">
@@ -87,20 +89,20 @@ const CreateEvent = () => {
           />
         </div>
 
-        <button
+        <Button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="eh-bg-blue-500 eh-text-white px-4 py-2 rounded"
         >
           Create Event
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
           onClick={() => navigate('/admin')}
-          className="ml-4 bg-gray-500 text-white px-4 py-2 rounded"
+          className="ml-4 eh-bg-gray-500 eh-text-white px-4 py-2 rounded"
         >
           Cancel
-        </button>
+        </Button>
       </form>
     </div>
   );
