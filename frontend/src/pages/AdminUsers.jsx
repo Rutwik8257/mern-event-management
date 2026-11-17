@@ -1,3 +1,5 @@
+import { Button } from "../components/Button";
+import "../styles/enterprise.css";
 // src/pages/AdminUsers.jsx
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
@@ -60,10 +62,10 @@ const AdminUsers = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="eh-screen eh-workspace container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Manage Users</h1>
       {users.length === 0 ? <p>No users found.</p> : (
-        <table className="min-w-full bg-white shadow rounded">
+        <div className="eh-table-scroll"><table className="min-w-full eh-bg-white eh-shadow rounded">
           <thead>
             <tr>
               <th className="border px-4 py-2">Username</th>
@@ -79,18 +81,18 @@ const AdminUsers = () => {
                 <td className="border px-4 py-2">{u.email}</td>
                 <td className="border px-4 py-2">{u.role}</td>
                 <td className="border px-4 py-2">
-                  <button onClick={() => handleEditUser(u)} className="bg-yellow-500 text-white px-3 py-1 rounded mr-2">Edit</button>
-                  <button onClick={() => handleDeleteUser(u._id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+                  <Button onClick={() => handleEditUser(u)} className="eh-bg-yellow-500 eh-text-white px-3 py-1 rounded mr-2">Edit</Button>
+                  <Button onClick={() => handleDeleteUser(u._id)} className="eh-bg-red-500 eh-text-white px-3 py-1 rounded">Delete</Button>
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
       )}
 
       {showEditModal && editingUser && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow w-full max-w-md">
+        <div className="fixed inset-0 eh-bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="eh-bg-white p-6 rounded eh-shadow w-full max-w-md">
             <h2 className="text-xl font-bold mb-4">Edit User: {editingUser.username}</h2>
             <form onSubmit={handleUpdateUser}>
               <input className="mb-2 border w-full p-2" value={editingUser.username} onChange={e => setEditingUser({...editingUser, username: e.target.value})} />
@@ -100,8 +102,8 @@ const AdminUsers = () => {
                 <option value="admin">Admin</option>
               </select>
               <div className="flex justify-between">
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
-                <button type="button" onClick={() => setShowEditModal(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                <Button type="submit" className="eh-bg-blue-500 eh-text-white px-4 py-2 rounded">Update</Button>
+                <Button type="button" onClick={() => setShowEditModal(false)} className="eh-bg-gray-500 eh-text-white px-4 py-2 rounded">Cancel</Button>
               </div>
             </form>
           </div>
