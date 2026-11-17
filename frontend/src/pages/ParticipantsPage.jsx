@@ -1,3 +1,5 @@
+import { Button } from "../components/Button";
+import "../styles/enterprise.css";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../api/axios";
@@ -41,9 +43,9 @@ const ParticipantsPage = () => {
   if (loading) return <p>Loading participants...</p>;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="eh-screen eh-workspace container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Participants</h1>
-      <table className="min-w-full bg-white shadow rounded">
+      <div className="eh-table-scroll"><table className="min-w-full eh-bg-white eh-shadow rounded">
         <thead>
           <tr>
             <th className="border px-4 py-2">Username</th>
@@ -61,25 +63,25 @@ const ParticipantsPage = () => {
               <td className="border px-4 py-2">
                 {p.status === "Pending" && (
                   <>
-                    <button
+                    <Button
                       onClick={() => handleStatusChange(p.user._id, "Approved")}
-                      className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                      className="eh-bg-green-500 eh-text-white px-2 py-1 rounded mr-2"
                     >
                       Approve
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => handleStatusChange(p.user._id, "Rejected")}
-                      className="bg-red-500 text-white px-2 py-1 rounded"
+                      className="eh-bg-red-500 eh-text-white px-2 py-1 rounded"
                     >
                       Reject
-                    </button>
+                    </Button>
                   </>
                 )}
               </td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
     </div>
   );
 };
