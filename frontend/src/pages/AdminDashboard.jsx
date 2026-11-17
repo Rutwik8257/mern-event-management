@@ -1,3 +1,5 @@
+import { Button } from "../components/Button";
+import "../styles/enterprise.css";
 // src/pages/AdminDashboard.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -86,50 +88,50 @@ export default function AdminDashboard() {
     window.location.href = "/login";
   }
   return (
-    <div className="p-6">
+    <div className="eh-screen eh-workspace p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Admin Dashboard</h1>
 
         <div className="flex items-center space-x-4">
           {/* Notification button */}
           <div className="relative">
-            <button
+            <Button
               onClick={() => setShowNotifications((s) => !s)}
-              className="relative bg-gray-100 p-2 rounded-full hover:bg-gray-200"
+              className="relative eh-bg-gray-100 p-2 rounded-full eh-hover-bg-gray-200"
               aria-label="Notifications"
             >
               🔔
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full px-1 text-xs">
+                <span className="absolute -top-1 -right-1 eh-bg-red-500 eh-text-white rounded-full px-1 text-xs">
                   {unreadCount}
                 </span>
               )}
-            </button>
+            </Button>
 
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-96 bg-white shadow-lg rounded z-50">
+              <div className="absolute right-0 mt-2 w-96 eh-bg-white eh-shadow-lg rounded z-50">
                 <div className="flex items-center justify-between px-3 py-2 border-b">
                   <strong>Notifications</strong>
-                  <button
+                  <Button
                     onClick={handleMarkAllRead}
-                    className="text-sm text-blue-600 hover:underline"
+                    className="text-sm eh-text-blue-600 hover:underline"
                   >
                     Mark all read
-                  </button>
+                  </Button>
                 </div>
                 <ul className="max-h-64 overflow-auto">
                   {notifications.length === 0 && (
-                    <li className="p-3 text-gray-600">No notifications</li>
+                    <li className="p-3 eh-text-gray-600">No notifications</li>
                   )}
                   {notifications.map((n) => (
                     <li
                       key={n._id}
                       className={`p-3 border-b ${
-                        n.read ? "bg-white" : "bg-gray-50"
+                        n.read ? "eh-bg-white" : "eh-bg-gray-50"
                       }`}
                     >
                       <div className="text-sm">{n.message}</div>
-                      <div className="text-xs text-gray-400">
+                      <div className="text-xs eh-text-gray-400">
                         {new Date(n.createdAt).toLocaleString()}
                       </div>
                     </li>
@@ -139,27 +141,27 @@ export default function AdminDashboard() {
             )}
           </div>
 
-          <button
+          <Button
             onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+            className="eh-bg-red-500 eh-text-white px-4 py-2 rounded eh-hover-bg-red-600 transition"
           >
             Logout
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="bg-white shadow rounded-xl p-4">
-          <h2 className="text-gray-600">Total Users</h2>
+        <div className="eh-bg-white eh-shadow rounded-xl p-4">
+          <h2 className="eh-text-gray-600">Total Users</h2>
           <p className="text-2xl font-bold">{kpis.totalUsers}</p>
         </div>
-        <div className="bg-white shadow rounded-xl p-4">
-          <h2 className="text-gray-600">Total Events</h2>
+        <div className="eh-bg-white eh-shadow rounded-xl p-4">
+          <h2 className="eh-text-gray-600">Total Events</h2>
           <p className="text-2xl font-bold">{kpis.totalEvents}</p>
         </div>
-        <div className="bg-white shadow rounded-xl p-4">
-          <h2 className="text-gray-600">Participation</h2>
+        <div className="eh-bg-white eh-shadow rounded-xl p-4">
+          <h2 className="eh-text-gray-600">Participation</h2>
           <p className="text-2xl font-bold">
             {Array.isArray(kpis.participationCounts)
               ? kpis.participationCounts.reduce(
@@ -173,30 +175,30 @@ export default function AdminDashboard() {
 
       {/* Quick Navigation */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-        <div
+        <Button
           onClick={() => navigate("/admin/analytics")}
-          className="cursor-pointer p-6 bg-blue-100 rounded-xl shadow hover:bg-blue-200 transition"
+          className="cursor-pointer p-6 eh-bg-blue-100 rounded-xl eh-shadow eh-hover-bg-blue-200 transition"
         >
-          📊 View Analytics
-        </div>
-        <div
+          📊 View Analytics <span aria-hidden="true">→</span>
+        </Button>
+        <Button
           onClick={() => navigate("/admin/users")}
-          className="cursor-pointer p-6 bg-green-100 rounded-xl shadow hover:bg-green-200 transition"
+          className="cursor-pointer p-6 eh-bg-green-100 rounded-xl eh-shadow eh-hover-bg-green-200 transition"
         >
-          👥 Manage Users
-        </div>
-        <div
+          👥 Manage Users <span aria-hidden="true">→</span>
+        </Button>
+        <Button
           onClick={() => navigate("/admin/events")}
-          className="cursor-pointer p-6 bg-purple-100 rounded-xl shadow hover:bg-purple-200 transition"
+          className="cursor-pointer p-6 eh-bg-purple-100 rounded-xl eh-shadow eh-hover-bg-purple-200 transition"
         >
-          🎉 Manage Events
-        </div>
-        <div
+          🎉 Manage Events <span aria-hidden="true">→</span>
+        </Button>
+        <Button
           onClick={() => navigate("/admin/participants")}
-          className="cursor-pointer p-6 bg-orange-100 rounded-xl shadow hover:bg-orange-200 transition"
+          className="cursor-pointer p-6 eh-bg-orange-100 rounded-xl eh-shadow eh-hover-bg-orange-200 transition"
         >
-          ✅ Approved Participants
-        </div>
+          ✅ Approved Participants <span aria-hidden="true">→</span>
+        </Button>
       </div>
     </div>
   );
